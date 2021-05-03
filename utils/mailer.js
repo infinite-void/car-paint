@@ -37,4 +37,27 @@ const registrationMail = (email, link) => {
         });
 };
 
-module.exports = { registrationMail };
+const forgotPasswordMail = (email, link) => {
+        const message = {
+                from: "srinath@ctf",
+                to: email,
+                subject: "Password Reset Link from car-paint",
+                html: "<h3>Password Reset Link<\h3> <br> <h4> Please <a href=" + 
+                        link + ">Click Here!<\a> to reset your password.<\h4>"
+        };
+
+        transport.sendMail(message, function(err, info) {
+                const date = new Date();
+        	const time = date.toLocaleString("en-US", {
+                	timeZone: "Asia/Kolkata" 
+        	});
+		
+		if (err) {
+			logfile.write("\n[ " + time + " ] Failure: Forgot password mail NOT sent to " + email);
+		} else {
+			logfile.write("\n[ " + time + " ] Success: Forgot password mail sent to " + email);
+		}
+        });
+};
+
+module.exports = { registrationMail, forgotPasswordMail };

@@ -14,6 +14,18 @@ const signin = (req, res, next) => {
                                 auth: false
                         });
                 }
+
+                if(user.pwd === null) {
+                        return res.status(401).send({
+                                message: "User signed in with Google. Please signin with Google."
+                        });
+                }
+
+                if(user.uid === null) {
+                        return res.status(401).send({
+                                message: "Please verify your mail to proceed. Check your registered mail." 
+                        });
+                }
                 try {
                         const pwdhash = sha1.hex(req.body.pwd);
                         if(user.pwd === pwdhash) {

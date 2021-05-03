@@ -1,4 +1,4 @@
-const { v1: uuidv1, v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 const sha1 = require("js-sha1");
 const url = require("url");
 const fs = require("fs");
@@ -30,7 +30,7 @@ const register = (req, res, next) => {
                                 const pwdhash = sha1.hex(req.body.pwd);
                                         
                                 const record = {
-                                        uid: 0,
+                                        uid: null,
                                         email: req.body.email,
                                         phone: req.body.phone,
                                         name: req.body.name,
@@ -42,7 +42,6 @@ const register = (req, res, next) => {
                                 const newUser = new User(record);
                                 newUser.save(function(err, doc) {
                                         if(err) {
-                                                console.log(err);
                                                 return res.status(500).send({ message: "Server Error." });
                                         }
                                         
@@ -62,7 +61,6 @@ const register = (req, res, next) => {
                                         }      
                                 });
                         } catch(err) {
-                                console.log(err);
                                 return res.status(500).send({ message: "Server Error." });
                         }
                 }
@@ -86,7 +84,7 @@ const verify = (req, res, next) => {
                                                 if(err) {
                                                         return res.status(500).send({ message: "Server Error." });        
                                                 }
-
+                                                
                                                 try {
                                                         return res.status(200).send({
                                                                 message: "User mail successfully verfied.",
