@@ -1,0 +1,89 @@
+<!DOCTYPE html> 
+<head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>           
+</head>
+<html> 
+        <body>
+                <div id = 'title-bar' style = "text-align: center; border: double;"> 
+                        <h3>CAR-PAINT-DASHBOARD</h3>
+                </div>
+                <br />
+                <div style="width: 100%; display: table;">
+                        <div style="display: table-row">
+                                <div style="width: 50%; display: table-cell;border: double; text-align: center"> 
+                                        <h5>GET PAINT JOB FOR CAR</h5> 
+                                        <label>Car License Plate</label> <input type = 'text' id = 'alicense' /> <br /> <br />
+                                        <label>Color  :  </label> 
+                                        <input type="radio" id="red" name="color" value="male">
+                                        <label for="red">RED</label>
+                                        <input type="radio" id="blue" name="color" value="blue">
+                                        <label for="blue">BLUE</label> 
+                                        <input type="radio" id="yellow" name="color" value="yellow">
+                                        <label for="yellow">YELLOW</label>
+                                        <input type="radio" id="green" name="color" value="green">
+                                        <label for="green">GREEN</label><br /> <br />
+                                        <button onclick="getCarPaint()">Get Car Painted!</button><br /><br />
+                                </div>
+                                <div style="display: table-cell; border: double;text-align: center;"> 
+                                        <h5>CHANGE SELECTED COLOR</h5> 
+                                        <label>Car License Plate</label> <input type = 'text' id = 'blicense' /> <br /> <br />
+                                        <label>Color  :  </label> 
+                                        <input type="radio" id="bred" name="color" value="male">
+                                        <label for="red">RED</label>
+                                        <input type="radio" id="bblue" name="color" value="blue">
+                                        <label for="blue">BLUE</label> 
+                                        <input type="radio" id="byellow" name="color" value="yellow">
+                                        <label for="yellow">YELLOW</label>
+                                        <input type="radio" id="bgreen" name="color" value="green">
+                                        <label for="green">GREEN</label><br /> <br />
+                                        <button onclick="changeCarPaint()">Change Color!</button><br /><br />
+                                </div>
+                        </div>
+                </div>
+                         
+                </div>
+                <div style="width: 100%; display: table;">
+                        <div style="display: table-row">
+                                <div style="width: 600px; display: table-cell;border: double; text-align: center"> 
+                                        <h5>My Position</h5>
+                                        <button onclick="myPos()">Get My Position!</button>
+                                        <button onclick="getQueue()">Get Whole Queue!</button> <br /><br />
+
+                                </div>
+                        </div>
+                        <div style="display: table-row">
+                                <div style="width: 600px; display: table-cell;border: double; text-align: center"> 
+                                        <h5>ABORT PAINT JOB</h5>
+                                        *WARNING BY CLICKING THIS BUTTON YOUR CURRENT STATUS IN THE QUEUE WILL BE LOST<br />
+                                        <label>Car License Plate</label> <input type = 'text' id = 'blicense' />
+                                        <button onclick="abort()">Abort Process</button>
+                                        <br /><br />
+                                </div>
+                        </div>
+                    </div>
+                        <p id = 'display'></p>
+                </div>
+
+                <script lang="javascript">
+                        function getCarPaint() {
+                                var license = document.getElementById('alicense').value;
+                                var color;
+
+                                if(document.getElementById("red").checked === true) 
+                                        color = "red";
+                                else if(document.getElementById("blue").checked === true)
+                                        color = "blue";
+                                else if(document.getElementById("green").checked === true)
+                                        color = "green";
+                                else if(document.getElementById("yellow").checked === true)
+                                        color = "yellow";
+                                else {
+                                        alert("select a color to get your car painted.");
+                                        return;
+                                }
+                                
+                                        
+                        }
+                </script>
+        </body>
+</html>

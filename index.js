@@ -18,8 +18,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const userRoutes = require("./routes/user");
+const funcRouter = require("./routes/queue");
 
 app.use("/api/user", userRoutes);
+app.use("/api/carpaint", funcRouter);
+
+app.get('/', (req, res) => {
+        res.sendFile('views/index.html', {root: __dirname });
+});
+
+app.get('/main', (req, res) => {
+        res.sendFile('views/main.html', {root: __dirname });
+});
 
 const db = config.MONGO_URI;
 
