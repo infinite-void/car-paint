@@ -9,7 +9,6 @@ const tokenAuth = (req, res, next) => {
         const token = req.headers["authorization"];
 
         if(!token) {
-                console.log(token);
                 return res.status(401).send({ auth: false, message: "Bad Request" });
         }
 
@@ -44,8 +43,37 @@ const tokenAuth = (req, res, next) => {
         }
 };
 
+const adminAuth = (req, res, next) => {
+        const token = req.headers["authorization"];
+
+        if(!token) {
+                return res.status(401).send({ auth: false, message: "Bad Request" });
+        }
+
+        try {
+                jwt.verify(token, process.env.JWTENCRYPTION, (err, tokenBody) => {
+                        if(err) {
+                                return req.status(500).send({ message: "Server Error." });
+                        }
+        
+                        if(!tokenBody.id) {
+                                return res.status(401).send({ auth: false, message: "Bad Request." });
+                        }
+
+                        if(tokenBody.id === process.env.adminauth) {
+                                req.user = "admin";
+                                next();
+                        } else {
+                                return res.status(401).send({ auth: false, message: "Bad Request." });
+                        }
+                });
+        } catch(err) {
+                return req.status(500).send({ message: "Server Error." });
+        }
+};
+
 const getJWT = (data) => {
         return jwt.sign({ id: data }, process.env.JWTENCRYPTION);
 };
 
-module.exports = { tokenAuth, getJWT };
+module.exports = { tokenAuth, getJWT, adminAuth };

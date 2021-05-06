@@ -78,9 +78,32 @@ class Queue {
                 return list;    
         }
 
+        admingetQueue() {
+                var list = [];
+                for(var node = this.head; node !== null; node = node.next) {
+                        list.push({ 
+                                licenseplate: node.licenseplate,
+                                color: node.color,
+                                user: node.user
+                        });
+                }
+                return list;    
+        }
+
         alterColor({ user, licenseplate,color }) {
                 for(var node = this.head; node !== null; node = node.next) {
                         if(node.user === user && node.licenseplate === licenseplate) {
+                                node.color = color;
+                                return null;
+                        }
+                }
+
+                return "Car currently not in Queue";
+        }
+
+        adminalterColor({ user, licenseplate,color }) {
+                for(var node = this.head; node !== null; node = node.next) {
+                        if(node.licenseplate === licenseplate) {
                                 node.color = color;
                                 return null;
                         }
@@ -118,8 +141,30 @@ class Queue {
                 }
 
                 while(node !== null && node.next !== null) {
-                        if(node.next.user === user && node.next.licenseplate === null) {
-                                node.next = node.next.next
+                        if(node.next.user === user && node.next.licenseplate === licenseplate) {
+                                node.next = node.next.next;
+                                return null;
+                        }
+                        node = node.next;
+                }
+
+                return "Operation Not Possible. either car is not in queue or your username is not registered with the car.";
+        }
+
+        admindropFromQueue({ user, licenseplate }) {
+                var node = this.head;
+                
+                if(this.isEmpty()) {
+                        return "Car currently not in Queue";
+                }
+                if(this.head.licenseplate === licenseplate) {
+                        this.head = this.head.next;
+                        return null;
+                }
+
+                while(node !== null && node.next !== null) {
+                        if(node.next.licenseplate === licenseplate) {
+                                node.next = node.next.next;
                                 return null;
                         }
                         node = node.next;

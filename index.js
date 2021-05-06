@@ -19,9 +19,11 @@ app.use(passport.session());
 
 const userRoutes = require("./routes/user");
 const funcRouter = require("./routes/queue");
+const adminRoutes = require("./routes/admin");
 
 app.use("/api/user", userRoutes);
 app.use("/api/carpaint", funcRouter);
+app.use("/api/admin", adminRoutes);
 
 app.get('/', (req, res) => {
         res.sendFile('views/index.html', {root: __dirname });
@@ -29,6 +31,10 @@ app.get('/', (req, res) => {
 
 app.get('/main', (req, res) => {
         res.sendFile('views/main.html', {root: __dirname });
+});
+
+app.get('/admin', (req, res) => {
+        res.sendFile('views/admin.html', {root: __dirname });
 });
 
 const db = config.MONGO_URI;

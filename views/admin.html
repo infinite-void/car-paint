@@ -12,7 +12,8 @@
                         <div style="display: table-row">
                                 <div style="width: 50%; display: table-cell;border: double; text-align: center"> 
                                         <h5>GET PAINT JOB FOR CAR</h5> 
-                                        <label>Car License Plate</label> <input type = 'text' id = 'alicense' /> <br /> <br />
+                                        <label>Customer Name : </label> <input type = 'text' id = 'auser' /> <br /> <br />
+                                        <label>Car License Plate : </label> <input type = 'text' id = 'alicense' /> <br /> <br />
                                         <label>Color  :  </label> 
                                         <input type="radio" id="red" name="color" value="male">
                                         <label for="red">RED</label>
@@ -26,7 +27,7 @@
                                 </div>
                                 <div style="display: table-cell; border: double;text-align: center;"> 
                                         <h5>CHANGE SELECTED COLOR</h5> 
-                                        <label>Car License Plate</label> <input type = 'text' id = 'blicense' /> <br /> <br />
+                                        <label>Car License Plate : </label> <input type = 'text' id = 'blicense' /> <br /> <br />
                                         <label>Color  :  </label> 
                                         <input type="radio" id="bred" name="color" value="male">
                                         <label for="red">RED</label>
@@ -44,9 +45,9 @@
                 </div>
                 <div style="width: 100%; display: table;">
                         <div style="display: table-row">
-                                <div style="width: 600px; display: table-cell;border: double; text-align: center"> 
-                                        <h5>My Position</h5>
-                                        <button onclick="getPosition()">Get My Position!</button>
+                                <div style="width: 600px; display: table-cell;border: double; text-align: center"> <br>
+                                        <label>Customer Name : </label> <input type = 'text' id = 'buser' /> 
+                                        <button onclick="getPosition()">Customer Position!</button>
                                         <button onclick="getQueue()">Get Whole Queue!</button> <br /><br />
 
                                 </div>
@@ -54,8 +55,7 @@
                         <div style="display: table-row">
                                 <div style="width: 600px; display: table-cell;border: double; text-align: center"> 
                                         <h5>ABORT PAINT JOB</h5>
-                                        *WARNING BY CLICKING THIS BUTTON YOUR CURRENT STATUS IN THE QUEUE WILL BE LOST<br />
-                                        <label>Car License Plate</label> <input type = 'text' id = 'clicense' />
+                                        <label>Car License Plate : </label> <input type = 'text' id = 'clicense' />
                                         <button onclick="abort()">Abort Process</button>
                                         <br /><br />
                                 </div>
@@ -70,6 +70,7 @@
 
                         function getCarPaint() {
                                 var license = document.getElementById('alicense').value;
+                                var user = document.getElementById('auser').value;
                                 var color;
 
                                 if(document.getElementById("red").checked === true) 
@@ -81,7 +82,7 @@
                                 else if(document.getElementById("yellow").checked === true)
                                         color = "yellow";
                                 else {
-                                        alert("select a color to get your car painted.");
+                                        alert("select a color.");
                                         return;
                                 }
                                 
@@ -90,14 +91,14 @@
                                                 'Authorization': document.cookie
                                         }
                                 });
-                                $.post(ipaddr + "api/carpaint/addqueue", {
+                                $.post(ipaddr + "api/admin/addqueue", {
+                                        user: user,
                                         licenseplate: license,
                                         color: color
                                 }, function(result, status) {
                                         if(result) {
                                                 document.getElementById("status").innerHTML = result.message;
-                                                getPosition();
-
+                                                getQueue();
                                         } else {
                                                 alert("Error. Approach Counter;.");
                                         }
@@ -117,7 +118,7 @@
                                 else if(document.getElementById("byellow").checked === true)
                                         color = "yellow";
                                 else {
-                                        alert("select a color to get your car painted.");
+                                        alert("select a color .");
                                         return;
                                 }
 
@@ -127,7 +128,7 @@
                                         }
                                 });
 
-                                $.post(ipaddr + "api/carpaint/changecolor", {
+                                $.post(ipaddr + "api/admin/changecolor", {
                                         licenseplate: license,
                                         color: color
                                 }, function(result) {
@@ -141,13 +142,16 @@
                         }
 
                         function getPosition() {
+                                var user = document.getElementById("buser").value;
                                 $.ajaxSetup({
                                         headers:{
                                                 'Authorization': document.cookie
                                         }
                                 });
 
-                                $.post(ipaddr + "api/carpaint/getposition", 
+                                $.post(ipaddr + "api/admin/getposition", {
+                                                user: user
+                                        },
                                         function(result) {
                                                 if(result) {
                                                         var str = "<table><tr><td>License Plate</td><td>Color</td><td>Position</td></tr>";
@@ -171,13 +175,13 @@
                                         }
                                 });
 
-                                $.post(ipaddr + "api/carpaint/getqueue", 
+                                $.post(ipaddr + "api/admin/getqueue", 
                                         function(result) {
                                                 if(result) {
                                                         console.log(result);
-                                                        var str = "<table><tr><td>License Plate</td><td>Color</td><td>Position</td></tr>";
+                                                        var str = "<table><tr><td>User</td<td>License Plate</td><td>Color</td><td>Position</td></tr>";
                                                         for(var x in result.currentqueue) {
-                                                                str += "<tr><td>" + result.currentqueue[x].licenseplate + "</td><td>" + result.currentqueue[x].color + "</td><td>" +  Number(Number(x)+1) + "</td></tr>";
+                                                                str += "<tr><td>" + result.currentqueue[x].user + "</td><td>" + result.currentqueue[x].licenseplate + "</td><td>" + result.currentqueue[x].color + "</td><td>" +  Number(Number(x)+1) + "</td></tr>";
                                                         }
                                                         str += "</table>"
                                                         document.getElementById('display').innerHTML = str;
@@ -190,6 +194,7 @@
 
                         function abort() {
                                 var license = document.getElementById("clicense").value;
+
                                 document.getElementById('display').innerHTML = "";
                                 
                                 $.ajaxSetup({
@@ -198,7 +203,7 @@
                                         }
                                 });
 
-                                $.post(ipaddr + "api/carpaint/abort", {
+                                $.post(ipaddr + "api/admin/abort", {
                                         licenseplate: license
                                 }, function(result) {
                                         if(result) {

@@ -29,22 +29,33 @@
                                         <p> To reset password, enter your mail-ID and your new password.</p><p>The verification link will be sent to you mail. Once verified, your password will be reset.</p>
                                 </div>
                         </div>
-                    </div>
-                         
+                    
                 </div>
+                <div style="width: 100%; display: table-row">
+                        <div style="width: 1600px; display: table-cell;border: double; text-align: center"> 
+                                <h5>Login</h5>
+                                <label>Username</label> <input type = 'text' id = 'adminuser' /> <br /> <br />
+                                <label>Password</label> <input type = 'password' id = adminpwd /> <br /> <br />
+                                <button onclick="adminlogin()">Admin Login</button> 
+                        </div>
+                </div>
+                         
+                
                 <script lang="javascript">
+                        var ipaddr = "http://localhost:3000/";
+
                         function login() {
                                 var email = document.getElementById('email').value;
                                 var pwd = document.getElementById('pwd').value;
                                 
-                                $.post("http://localhost:3000/api/user/signin", {
+                                $.post(ipaddr + "api/user/signin", {
                                         email: email, 
                                         pwd: pwd
                                 }, function(result){
                                         
                                         if(result.token) {
                                                 document.cookie = result.token;
-                                                window.location.replace("http://localhost:3000/main");
+                                                window.location.replace(ipaddr + "main");
                                         }
                                         else 
                                                 alert("Error in signin");
@@ -57,7 +68,7 @@
                                 var name = document.getElementById('rname').value;
                                 var phone = document.getElementById('rphone').value;
 
-                                $.post("http://localhost:3000/api/user/register", {
+                                $.post(ipaddr + "api/user/register", {
                                         email: email, 
                                         pwd: pwd,
                                         name: name,
@@ -76,7 +87,7 @@
                                 var email = document.getElementById('email').value;
                                 var pwd = document.getElementById('pwd').value;
                                 
-                                $.post("http://localhost:3000/api/user/forgotpass", {
+                                $.post(ipaddr + "api/user/forgotpass", {
                                         email: email, 
                                         pwd: pwd
                                 }, function(result){
@@ -88,6 +99,25 @@
                                                 alert("Error in signin");
                                 });
                         }
+
+                        function adminlogin() {
+                                var username = document.getElementById("adminuser").value;
+                                var pwd = document.getElementById("adminpwd").value;
+
+                                $.post(ipaddr + "api/admin/login", {
+                                        user: username,
+                                        pass: pwd
+                                }, function(result) {
+                                        if(result.token) {
+                                                document.cookie = result.token;
+                                                window.location.replace(ipaddr + "admin");
+                                        }
+                                        else 
+                                                alert("Error in signin");
+                                });
+                        }
+
+                        
                 </script>
         </body>
 </html>
