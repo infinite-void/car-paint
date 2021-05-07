@@ -1,7 +1,9 @@
 const { v4: uuidv4 } = require("uuid");
+const url = require("url");
 const { getJWT } = require("./auth");
 
 const User = require("../models/user");
+const { environment } = require("../config/environment");
 
 const googleSignin = (req, res, next) => {
         try {
@@ -17,13 +19,15 @@ const googleSignin = (req, res, next) => {
                                                 message: "User registered. Check your mail for verification."
                                         });
                                 else 
-                                        return res.status(200).send({
-                                                message: "User login successful.",
-                                                email: user.email,
-                                                name: user.name,
-                                                auth: true,
-                                                token: getJWT(user.uid) 
-                                        });
+                                        return res.redirect(environment[process.env.NODE_ENV].url + "main" + url.format({
+                                                query: {
+                                                        message: "User login successful.",
+                                                        email: user.email,
+                                                        name: user.name,
+                                                        auth: true,
+                                                        token: getJWT(user.uid)
+                                                }
+                                        }));
                         }
 
                         const record = {
@@ -37,13 +41,16 @@ const googleSignin = (req, res, next) => {
                         newUser.save( function (err, user) {
                                 if(err)
                                         return res.status(500).send({ message: "Server Error." });
-                                return res.status(200).send({
-                                        message: "User Registration Successful.",
-                                        email: user.email,
-                                        name: user.name,
-                                        auth: true,
-                                        token: getJWT(user.uid) 
-                                })
+                                
+                                return res.redirect(environment[process.env.NODE_ENV].url + "main" + url.format({
+                                        query: {
+                                                message: "User Registration Successful.",
+                                                email: user.email,
+                                                name: user.name,
+                                                auth: true,
+                                                token: getJWT(user.uid) 
+                                        }
+                                }));
                         });
                 });
         } catch(err) {

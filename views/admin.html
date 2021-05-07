@@ -15,7 +15,7 @@
                                         <label>Customer Name : </label> <input type = 'text' id = 'auser' /> <br /> <br />
                                         <label>Car License Plate : </label> <input type = 'text' id = 'alicense' /> <br /> <br />
                                         <label>Color  :  </label> 
-                                        <input type="radio" id="red" name="color" value="male">
+                                        <input type="radio" id="red" name="color" value="red">
                                         <label for="red">RED</label>
                                         <input type="radio" id="blue" name="color" value="blue">
                                         <label for="blue">BLUE</label> 
@@ -29,7 +29,7 @@
                                         <h5>CHANGE SELECTED COLOR</h5> 
                                         <label>Car License Plate : </label> <input type = 'text' id = 'blicense' /> <br /> <br />
                                         <label>Color  :  </label> 
-                                        <input type="radio" id="bred" name="color" value="male">
+                                        <input type="radio" id="bred" name="color" value="red">
                                         <label for="red">RED</label>
                                         <input type="radio" id="bblue" name="color" value="blue">
                                         <label for="blue">BLUE</label> 
@@ -57,6 +57,29 @@
                                         <h5>ABORT PAINT JOB</h5>
                                         <label>Car License Plate : </label> <input type = 'text' id = 'clicense' />
                                         <button onclick="abort()">Abort Process</button>
+                                        <br /><br />
+                                </div>
+                        </div>
+                        <div style="display: table-row">
+                                <div style="width: 600px; display: table-cell;border: double; text-align: center"> 
+                                        <h5>Block/Resume Color</h5> 
+                                        <input type="radio" id="cred" name="color" value="red">
+                                        <label for="red">RED</label>
+                                        <input type="radio" id="cblue" name="color" value="blue">
+                                        <label for="blue">BLUE</label> 
+                                        <input type="radio" id="cyellow" name="color" value="yellow">
+                                        <label for="yellow">YELLOW</label>
+                                        <input type="radio" id="cgreen" name="color" value="green">
+                                        <label for="green">GREEN</label>
+                                        <button onclick="blockcolor()">Block Color!</button>
+                                        <button onclick="resumecolor()">Resume Color!</button>
+                                </div>
+                        </div>
+                        <div style="display: table-row">
+                                <div style="width: 600px; display: table-cell;border: double; text-align: center"> 
+                                        <h5>Set Queue Length</h5>
+                                        <label>Queue Length : </label> <input type = 'text' id = 'QL' />
+                                        <button onclick="setql()">Set Queue Length</button>
                                         <br /><br />
                                 </div>
                         </div>
@@ -214,6 +237,91 @@
                                         }
                                 });                                
                                 
+                        }
+
+                        function blockcolor() {
+                                var color;
+
+                                if(document.getElementById("cred").checked === true) 
+                                        color = "red";
+                                else if(document.getElementById("cblue").checked === true)
+                                        color = "blue";
+                                else if(document.getElementById("cgreen").checked === true)
+                                        color = "green";
+                                else if(document.getElementById("cyellow").checked === true)
+                                        color = "yellow";
+                                else {
+                                        alert("select a color .");
+                                        return;
+                                }
+
+                                $.ajaxSetup({
+                                        headers:{
+                                                'Authorization': document.cookie
+                                        }
+                                });
+
+                                $.post(ipaddr + "api/admin/blockcolor", {
+                                        color: color
+                                }, function(result) {
+                                        if(result) {
+                                                document.getElementById("status").innerHTML = result.message;
+                                        } else {
+                                                alert("Error in Operation");
+                                        }
+                                });
+                        }
+                         
+                        function resumecolor() {
+                                var color;
+
+                                if(document.getElementById("cred").checked === true) 
+                                        color = "red";
+                                else if(document.getElementById("cblue").checked === true)
+                                        color = "blue";
+                                else if(document.getElementById("cgreen").checked === true)
+                                        color = "green";
+                                else if(document.getElementById("cyellow").checked === true)
+                                        color = "yellow";
+                                else {
+                                        alert("select a color .");
+                                        return;
+                                }
+
+                                $.ajaxSetup({
+                                        headers:{
+                                                'Authorization': document.cookie
+                                        }
+                                });
+
+                                $.post(ipaddr + "api/admin/resumecolor", {
+                                        color: color
+                                }, function(result) {
+                                        if(result) {
+                                                document.getElementById("status").innerHTML = result.message;
+                                        } else {
+                                                alert("Error in Operation");
+                                        }
+                                });
+                        }
+
+                        function setql() {
+                                var ql = document.getElementById("QL").value;
+                                $.ajaxSetup({
+                                        headers:{
+                                                'Authorization': document.cookie
+                                        }
+                                });
+
+                                $.post(ipaddr + "api/admin/setqlength", {
+                                        qlength: ql
+                                }, function(result) {
+                                        if(result) {
+                                                document.getElementById("status").innerHTML = result.message;
+                                        } else {
+                                                alert("Error in Operation");
+                                        }
+                                });
                         }
                 </script>
         </body>

@@ -15,6 +15,10 @@ class Queue {
                 return false;
         }
 
+        getQueueLength() {
+                return this.size;
+        }
+
         enQueue({ user, licenseplate, color }) {
                 const node = new Node({ user, licenseplate, color });
                 var qlist = this.getPostion({ user });

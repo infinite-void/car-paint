@@ -11,5 +11,8 @@ router.post("/changecolor", tokenauth.adminAuth, queue.adminchangeColor);
 router.post("/getposition", tokenauth.adminAuth, queue.getPosition);
 router.post("/getqueue", tokenauth.adminAuth, queue.admingetQueue);
 router.post("/abort", tokenauth.adminAuth, queue.adminAbort);
+router.post("/blockcolor", tokenauth.adminAuth, queue.blockColor);
+router.post("/resumecolor", tokenauth.adminAuth, queue.allowColor);
+router.post("/setqlength", tokenauth.adminAuth, queue.setqueuelength);
 
 module.exports = router;

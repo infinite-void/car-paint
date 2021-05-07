@@ -67,7 +67,12 @@
 
                 <script lang="javascript">
                         var ipaddr = "http://localhost:3000/";
-
+                        window.onload = storecookie();
+                        function storecookie() {
+                                const params = new URLSearchParams(window.location.search);
+                                if(params.has("token"))
+                                        document.cookie = params.get("token");
+                        }
                         function getCarPaint() {
                                 var license = document.getElementById('alicense').value;
                                 var color;
@@ -174,7 +179,6 @@
                                 $.post(ipaddr + "api/carpaint/getqueue", 
                                         function(result) {
                                                 if(result) {
-                                                        console.log(result);
                                                         var str = "<table><tr><td>License Plate</td><td>Color</td><td>Position</td></tr>";
                                                         for(var x in result.currentqueue) {
                                                                 str += "<tr><td>" + result.currentqueue[x].licenseplate + "</td><td>" + result.currentqueue[x].color + "</td><td>" +  Number(Number(x)+1) + "</td></tr>";

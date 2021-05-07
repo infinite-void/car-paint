@@ -1,6 +1,14 @@
-const Queue = require("../queue");
+const { getObject } = require("./qobject");
+const queue = getObject();
 
-const queue = new Queue();
+
+const coloravail = {
+        "red": true,
+        "green": true,
+        "yellow": true,
+        "blue": true
+};
+var queuelength = 10;
 
 const addQueue = (req, res, next) => {
         try {
@@ -9,6 +17,19 @@ const addQueue = (req, res, next) => {
                         user = req.body.user;
                 } else {
                         user = req.user.name;
+                }
+
+                if(queue.getQueueLength() >= queuelength) {
+                        return res.status(200).send({
+                                message: "Queue Full at the moment. Try Again Later."
+                        });
+                }
+                const color = req.body.color;
+                
+                if(!coloravail[color]) {
+                        return res.status(200).send({
+                                message: "Color Not Available Currently. Please select another color."
+                        });
                 }
 
                 const result = queue.enQueue({
@@ -20,7 +41,6 @@ const addQueue = (req, res, next) => {
                 if(result !== null) {
                         return res.status(200).send({ message: result });
                 }
-        
                 return res.status(200).send({
                         message: "Successfully Registered. Please wait for your turn."
                 });
@@ -32,6 +52,14 @@ const addQueue = (req, res, next) => {
 
 const changeColor = (req, res, next) => {
         try {
+                const color = req.body.color;
+                
+                if(!coloravail[color]) {
+                        return res.status(200).send({
+                                message: "Color Not Available Currently. Please select another color."
+                        });
+                }
+                
                 const user = req.user.name;
                 const result = queue.alterColor({
                         user: user,
@@ -42,7 +70,6 @@ const changeColor = (req, res, next) => {
                 if(result !== null) {
                         return res.status(200).send({ message: result });
                 }
-        
                 return res.status(200).send({
                         message: "Color Change Successful. Please wait for your turn."
                 });
@@ -53,7 +80,14 @@ const changeColor = (req, res, next) => {
 
 const adminchangeColor = (req, res, next) => {
         try {
+                const color = req.body.color;
                 
+                if(!coloravail[color]) {
+                        return res.status(200).send({
+                                message: "Color Not Available Currently. Please select another color."
+                        });
+                }
+
                 const result = queue.adminalterColor({
                         licenseplate: req.body.licenseplate,
                         color: req.body.color
@@ -62,7 +96,6 @@ const adminchangeColor = (req, res, next) => {
                 if(result !== null) {
                         return res.status(200).send({ message: result });
                 }
-        
                 return res.status(200).send({
                         message: "Color Change Successful. Please wait for your turn."
                 });
@@ -151,6 +184,35 @@ const adminAbort = (req, res, next) => {
 };
 
 
+const blockColor = (req, res, next) => {
+        try {
+                const color = req.body.color;
+                coloravail[color] = false;
+                res.status(200).send({ message: "Color blocked successfully." });
+        } catch(err) {
+                return res.status(500).send({ message: "Server Error." });
+        }
+};
+
+const allowColor = (req, res, next) => {
+        try {
+                const color = req.body.color;
+                coloravail[color] = true;
+                res.status(200).send({ message: "Color resumed successfully." });
+        } catch(err) {
+                return res.status(500).send({ message: "Server Error." });
+        }
+};
+
+const setqueuelength = (req, res, next) => {
+        try {
+                queuelength = req.body.qlength;
+                return res.status(200).send({ message: "Queue Length Set Successfully." });
+        } catch(err) {
+                return res.status(500).send({ message: "Server Error." });
+        }
+};
 
 module.exports = { addQueue, changeColor, getPosition, getQueue, 
-        removeFromQueue, adminchangeColor, adminAbort, admingetQueue };
+        removeFromQueue, adminchangeColor, adminAbort, admingetQueue,
+        blockColor, allowColor, setqueuelength };

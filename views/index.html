@@ -9,7 +9,6 @@
                 <div id = 'title-bar' style = "text-align: center; border: double;"> 
                         <h3>CAR-PAINT</h3>
                 </div>
-                <br />
                 <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                                 <div style="width: 50%; display: table-cell;border: double; text-align: center"> 
@@ -24,7 +23,7 @@
                                         <h5>Login</h5>
                                         <label>e-mail</label> <input type = 'text' id = 'email' /> <br /> <br />
                                         <label>Password</label> <input type = 'password' id = pwd /> <br /> <br />
-                                        <button onclick="login()">Login</button> 
+                                        <button onclick="login()">Login</button>  
                                         <button onclick="forgotpass()">Reset Password</button>
                                         <p> To reset password, enter your mail-ID and your new password.</p><p>The verification link will be sent to you mail. Once verified, your password will be reset.</p>
                                 </div>
@@ -33,10 +32,17 @@
                 </div>
                 <div style="width: 100%; display: table-row">
                         <div style="width: 1600px; display: table-cell;border: double; text-align: center"> 
-                                <h5>Login</h5>
+                                <br />
+                                <button onclick="googlesignin()">Signin/Signup with Google</button>
+                                <br /><br /> 
+                        </div>
+                </div>
+                <div style="width: 100%; display: table-row">
+                        <div style="width: 1600px; display: table-cell;border: double; text-align: center"> 
+                                <h5>Admin/Login Login</h5>
                                 <label>Username</label> <input type = 'text' id = 'adminuser' /> <br /> <br />
                                 <label>Password</label> <input type = 'password' id = adminpwd /> <br /> <br />
-                                <button onclick="adminlogin()">Admin Login</button> 
+                                <button onclick="adminlogin()">Admin Login</button> <br /><br />
                         </div>
                 </div>
                          
@@ -117,7 +123,9 @@
                                 });
                         }
 
-                        
+                        function googlesignin() {
+                                window.location.replace(ipaddr + "api/user/googlesignin");
+                        } 
                 </script>
         </body>
 </html>
